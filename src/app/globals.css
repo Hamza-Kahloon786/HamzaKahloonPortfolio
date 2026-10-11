@@ -1,0 +1,283 @@
+@import "tailwindcss";
+
+@theme {
+  /* Light theme (Emerald & Sky): "paper" = backgrounds, "ink" = text.
+     violet / violet-deep / lilac / cyan are the accent roles (primary, primary-dark, primary-text, secondary). */
+  --color-paper: #ffffff;
+  --color-paper-2: #f3f8f6;
+  --color-paper-3: #e5eeea;
+  --color-ink: #0a1311;
+  --color-mist: #48544f;
+  --color-dim: #616e69;
+  --color-line: rgb(10 19 17 / 0.09);
+  --color-line-strong: rgb(10 19 17 / 0.18);
+  --color-violet: #10a37f;
+  --color-violet-deep: #0b7d61;
+  --color-lilac: #0b8a6a;
+  --color-cyan: #0ea5e9;
+  --color-grad-1: #0b8a6a;
+  --color-grad-2: #0ea38a;
+  --color-grad-3: #0284c7;
+
+  --font-display: var(--font-sora), "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-script: var(--font-script-face), cursive;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-marquee-reverse: marquee-reverse var(--marquee-duration, 40s) linear infinite;
+  --animate-spin-slow: spin 28s linear infinite;
+  --animate-spin-slower: spin 60s linear infinite reverse;
+  --animate-pulse-ring: pulse-ring 2.2s var(--ease-expo) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-scroll-line: scroll-line 2.4s var(--ease-expo) infinite;
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translate3d(-50%, 0, 0); }
+    to { transform: translate3d(0, 0, 0); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.9; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -12px, 0); }
+  }
+  @keyframes scroll-line {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-paper);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-violet) 85%, transparent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 1.5px solid var(--color-lilac);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Native cursor is hidden only when the custom cursor is active (fine pointers). */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(14 13 20 / 0.22) transparent;
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+@layer components {
+  .container-x {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1440px;
+    padding-inline: clamp(1rem, 4vw, 3.5rem);
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--color-ink) 62%, transparent);
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-grad-1) 0%, var(--color-grad-2) 45%, var(--color-grad-3) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--color-ink) 32%, transparent);
+  }
+
+  .glass {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.65));
+    border: 1px solid var(--color-line);
+    box-shadow: 0 12px 34px -14px rgb(40 20 90 / 0.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Cursor-following spotlight — set --mx / --my from JS. */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--color-violet) 9%, transparent),
+      transparent 45%
+    );
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-expo);
+  }
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      300px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--color-violet) 55%, transparent),
+      transparent 50%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-expo);
+    pointer-events: none;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgb(14 13 20 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(14 13 20 / 0.045) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgb(14 13 20 / 0.16), transparent);
+  }
+}
+
+/* Film grain over everything — subtle, GPU-cheap. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Pre-paint: hide the intro on repeat visits in the same session. */
+html.intro-seen #preloader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accent words stay upright (synthetic italics look dated in a sans display face). */
+.italic.text-gradient,
+.font-display .italic {
+  font-style: normal;
+}
+
+/* Inverted (dark) surface for bold sections like the footer: flips the neutral tokens,
+   keeps the theme accent. Usage: <footer class="theme-invert bg-paper text-ink"> */
+.theme-invert {
+  --color-paper: #0a0a0b;
+  --color-paper-2: #141416;
+  --color-paper-3: #1d1d20;
+  --color-ink: #ffffff;
+  --color-mist: rgb(255 255 255 / 0.66);
+  --color-dim: rgb(255 255 255 / 0.5);
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-line-strong: rgb(255 255 255 / 0.2);
+  --color-lilac: color-mix(in oklab, var(--color-violet) 70%, white);
+  color-scheme: dark;
+}
+.theme-invert .text-outline {
+  -webkit-text-stroke-color: rgb(255 255 255 / 0.42);
+}
+
+/* Phones get a lighter experience: no intro overlay or film grain, and the hero is
+   visible from the first paint instead of waiting for JavaScript to animate it in. */
+@media (max-width: 767px) {
+  #preloader,
+  .grain {
+    display: none !important;
+  }
+  .hero-instant,
+  .hero-instant-all,
+  .hero-instant-all * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Phones: skip layout and paint of off-screen sections until they approach the viewport
+   (a large first-paint win on this long page). `cv-off` is added before programmatic
+   scrolls so section positions are exact. Overlays are portalled to <body>, so the
+   containment this implies doesn't trap them. */
+@media (max-width: 767px) {
+  #main > section:not(#home) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1200px;
+  }
+  /* Same specificity as the rule above (plus a class), so it reliably wins. */
+  html.cv-off #main > section:not(#home) {
+    content-visibility: visible;
+  }
+}
