@@ -11,6 +11,7 @@ import { lockScroll, scrollToTarget, unlockScroll } from "@/lib/scroll";
 import { cn, EASE, pad2 } from "@/lib/utils";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { SoundToggle } from "@/components/ui/SoundEffects";
+import { ThemePicker } from "@/components/ui/ThemePicker";
 
 export const NAV_LINKS = [
   { id: "home", label: "Home" },
@@ -153,6 +154,7 @@ export function Navbar() {
             </ul>
 
             <div className="flex items-center gap-2 sm:gap-3">
+              <ThemePicker />
               <SoundToggle />
               <button
                 type="button"

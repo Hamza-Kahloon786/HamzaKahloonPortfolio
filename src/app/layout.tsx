@@ -5,6 +5,7 @@ import { profile } from "@/data/profile";
 import { allSkills } from "@/data/skills";
 import { certifications } from "@/data/certifications";
 import { absoluteUrl, site } from "@/lib/site";
+import { themeScript } from "@/lib/theme";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -122,8 +123,8 @@ const websiteLd = {
   author: { "@id": `${site.url}/#person` },
 };
 
-/** Runs before paint: skip the intro overlay on repeat visits in the same tab session. */
-const introScript = `try{if(sessionStorage.getItem('hk-intro')==='1')document.documentElement.classList.add('intro-seen')}catch(e){}`;
+/** Runs before paint: skip the intro on repeat visits this session, and apply the saved color theme. */
+const introScript = `try{if(sessionStorage.getItem('hk-intro')==='1')document.documentElement.classList.add('intro-seen')}catch(e){}${themeScript}`;
 
 export default function RootLayout({ children, modal }: LayoutProps<"/">) {
   return (
