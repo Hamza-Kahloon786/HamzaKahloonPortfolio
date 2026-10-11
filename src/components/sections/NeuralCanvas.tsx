@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { onThemeChange } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 type Node = { x: number; y: number; vx: number; vy: number; r: number };
@@ -227,6 +228,7 @@ export function NeuralCanvas({ className }: { className?: string }) {
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     document.addEventListener("visibilitychange", onVisibility);
+    const offTheme = onThemeChange(readColors);
 
     return () => {
       if (hasIdle) window.cancelIdleCallback(idleId);
@@ -237,6 +239,7 @@ export function NeuralCanvas({ className }: { className?: string }) {
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
+      offTheme();
     };
   }, []);
 

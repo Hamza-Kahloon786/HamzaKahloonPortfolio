@@ -17,6 +17,8 @@ import { Portal } from "@/components/ui/Portal";
 
 const TOPICS = ["Full-time role", "Freelance project", "AI / voice agent build", "Just saying hi"];
 
+const [emailLocal, emailDomain] = profile.email.split("@");
+
 export function Contact({ github }: { github: GitHubSnapshot | null }) {
   const [copied, setCopied] = useState(false);
   const [drawer, setDrawer] = useState(false);
@@ -95,31 +97,32 @@ export function Contact({ github }: { github: GitHubSnapshot | null }) {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Reveal className="md:col-span-2">
-            <Spotlight className="group h-full rounded-3xl border border-line bg-paper-2/85 p-7 md:p-9">
-              <div className="flex items-start justify-between">
-                <span className="grid size-14 place-items-center rounded-2xl border border-line bg-paper text-xl text-lilac">
-                  <LuMail />
-                </span>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-line px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-mist transition-colors hover:border-lilac hover:text-ink"
+        <Reveal className="mt-14">
+          <Spotlight className="group rounded-[28px] border border-line bg-paper-2/85 p-6 md:p-8">
+            <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-linear-to-br from-violet to-cyan text-lg text-white shadow-[0_12px_28px_-12px_var(--color-violet)]">
+                    <LuMail />
+                  </span>
+                  <p className="kicker">Email me directly</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  aria-label={`Copy email address ${profile.email}`}
+                  className="mt-4 block max-w-full text-left font-display text-[clamp(0.875rem,4.3vw,2.4rem)] font-semibold leading-tight text-ink transition-colors hover:text-lilac"
                 >
-                  Open mail app <LuArrowUpRight />
-                </a>
+                  {emailLocal}
+                  <wbr />@{emailDomain}
+                </button>
               </div>
-              <p className="mt-10 font-mono text-[10px] uppercase tracking-[0.3em] text-dim">Email — click to copy</p>
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="mt-3 flex w-full items-center justify-between gap-4 text-left"
-                aria-label={`Copy email address ${profile.email}`}
-              >
-                <span className="break-all font-display text-[clamp(1.5rem,3.2vw,2.8rem)] leading-tight text-ink transition-colors group-hover:text-lilac">
-                  {profile.email}
-                </span>
-                <span className="grid size-12 shrink-0 place-items-center rounded-full border border-line text-ink">
+              <div className="flex shrink-0 flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="inline-flex items-center gap-2 rounded-full border-[1.5px] border-ink px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink hover:text-paper"
+                >
                   <AnimatePresence mode="wait" initial={false}>
                     <motion.span
                       key={copied ? "y" : "n"}
@@ -127,47 +130,56 @@ export function Contact({ github }: { github: GitHubSnapshot | null }) {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.4, opacity: 0 }}
                       transition={{ duration: 0.2 }}
+                      className="grid place-items-center"
                     >
-                      {copied ? <LuCheck className="text-emerald-600" /> : <LuCopy />}
+                      {copied ? <LuCheck /> : <LuCopy />}
                     </motion.span>
                   </AnimatePresence>
-                </span>
-              </button>
-              <p className="mt-3 h-5 text-sm text-emerald-700" aria-live="polite">
-                {copied ? "Copied to clipboard — talk soon!" : ""}
-              </p>
-            </Spotlight>
-          </Reveal>
+                  {copied ? "Copied!" : "Copy email"}
+                </button>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="group/mail inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-paper transition-colors hover:bg-violet"
+                >
+                  Open mail app
+                  <LuArrowUpRight className="transition-transform duration-300 group-hover/mail:rotate-45" />
+                </a>
+              </div>
+            </div>
+            <p className="sr-only" aria-live="polite">
+              {copied ? "Email address copied to clipboard" : ""}
+            </p>
+          </Spotlight>
+        </Reveal>
 
-          <ChannelCard
+        <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <ContactCard
             delay={0.05}
             href={profile.linkedin}
             icon={<FaLinkedinIn />}
             title="LinkedIn"
-            text="Let's connect — posts, projects and updates."
-            accent="#0a66c2"
+            detail={profile.name}
+            brand="#0a66c2"
           />
-          <Reveal delay={0.1}>
-            <button
-              type="button"
-              onClick={() => setDrawer(true)}
-              data-cursor="view"
-              data-cursor-label="Stats"
-              className="block h-full w-full text-left"
-            >
-              <ChannelBody icon={<FaGithub />} title="GitHub" text={`Explore my work — ${github?.publicRepos ?? 29} public repositories, live stats inside.`} accent="#0e0d14" cta="Open stats" />
-            </button>
-          </Reveal>
-          <ChannelCard
+          <ContactCard
+            delay={0.1}
+            onClick={() => setDrawer(true)}
+            icon={<FaGithub />}
+            title="GitHub"
+            detail={`${github?.publicRepos ?? 29} repos · live stats`}
+            brand="#181717"
+            cursorLabel="Stats"
+          />
+          <ContactCard
             delay={0.15}
             href={`${profile.whatsapp}?text=${encodeURIComponent("Hi Hamza! I found your portfolio and would love to chat.")}`}
             icon={<FaWhatsapp />}
             title="WhatsApp"
-            text="Fastest way to reach me for a quick chat."
-            accent="#25d366"
+            detail="Chat with me instantly"
+            brand="#25d366"
           />
-          <ChannelCard delay={0.2} href={profile.phoneHref} icon={<LuPhone />} title="Phone" text={profile.phone} accent="var(--color-lilac)" external={false} />
-        </div>
+          <ContactCard delay={0.2} href={profile.phoneHref} icon={<LuPhone />} title="Phone" detail={profile.phone} brand="var(--color-violet)" external={false} />
+        </ul>
 
         <ComposeForm />
       </div>
@@ -194,49 +206,56 @@ function LocalTime() {
   );
 }
 
-function ChannelBody({ icon, title, text, accent, cta }: { icon: React.ReactNode; title: string; text: string; accent: string; cta: string }) {
-  return (
-    <Spotlight className="group flex h-full flex-col rounded-3xl border border-line bg-paper-2/85 p-7 transition-transform duration-500 hover:-translate-y-1.5">
-      <div className="flex items-start justify-between">
-        <span
-          className="grid size-14 place-items-center rounded-2xl border border-line bg-paper text-xl transition-colors duration-500"
-          style={{ color: accent }}
-        >
-          {icon}
-        </span>
-        <span className="grid size-10 place-items-center rounded-full border border-line text-mist transition-all duration-500 group-hover:rotate-45 group-hover:border-lilac group-hover:bg-violet group-hover:text-white">
-          <LuArrowUpRight />
-        </span>
-      </div>
-      <p className="mt-10 font-display text-3xl text-ink">{title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-mist">{text}</p>
-      <p className="mt-auto pt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-dim transition-colors group-hover:text-lilac">{cta} →</p>
-    </Spotlight>
-  );
-}
-
-function ChannelCard({
-  href,
+/** Compact contact channel: lifts and fills with its brand color on hover. */
+function ContactCard({
   icon,
   title,
-  text,
-  accent,
+  detail,
+  brand,
   delay,
+  href,
+  onClick,
   external = true,
+  cursorLabel,
 }: {
-  href: string;
   icon: React.ReactNode;
   title: string;
-  text: string;
-  accent: string;
+  detail: string;
+  brand: string;
   delay: number;
+  href?: string;
+  onClick?: () => void;
   external?: boolean;
+  cursorLabel?: string;
 }) {
+  const className =
+    "group flex h-full w-full items-center gap-4 rounded-3xl border border-line bg-paper-2/85 p-5 text-left transition-all duration-500 hover:-translate-y-1 hover:border-[color:var(--brand)] hover:shadow-[0_22px_44px_-26px_var(--brand)]";
+  const body = (
+    <>
+      <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-line bg-paper text-lg text-[color:var(--brand)] transition-colors duration-500 group-hover:border-transparent group-hover:bg-[color:var(--brand)] group-hover:text-white">
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-lg font-semibold text-ink">{title}</span>
+        <span className="block truncate text-sm text-mist">{detail}</span>
+      </span>
+      <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-mist transition-all duration-500 group-hover:rotate-45 group-hover:border-transparent group-hover:bg-ink group-hover:text-paper">
+        <LuArrowUpRight />
+      </span>
+    </>
+  );
+  const style = { ["--brand" as string]: brand };
   return (
-    <Reveal delay={delay}>
-      <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="block h-full">
-        <ChannelBody icon={icon} title={title} text={text} accent={accent} cta={external ? "Open" : "Call"} />
-      </a>
+    <Reveal as="li" delay={delay}>
+      {href ? (
+        <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={className} style={style}>
+          {body}
+        </a>
+      ) : (
+        <button type="button" onClick={onClick} data-cursor="view" data-cursor-label={cursorLabel} className={className} style={style}>
+          {body}
+        </button>
+      )}
     </Reveal>
   );
 }

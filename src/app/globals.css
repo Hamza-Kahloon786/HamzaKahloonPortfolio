@@ -227,6 +227,99 @@ html.intro-seen #preloader {
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Visitor-selectable color themes (see src/lib/theme.ts).
+   Emerald is the default in @theme above; these only swap colors.
+   ───────────────────────────────────────────────────────────── */
+html[data-theme="ocean"] {
+  --color-paper-2: #f3f6fd;
+  --color-paper-3: #e6ecfa;
+  --color-ink: #0b0d17;
+  --color-mist: #4a4f63;
+  --color-dim: #646a80;
+  --color-line: rgb(11 13 23 / 0.09);
+  --color-line-strong: rgb(11 13 23 / 0.18);
+  --color-violet: #2b4bff;
+  --color-violet-deep: #1832d8;
+  --color-lilac: #2342e6;
+  --color-cyan: #06b6d4;
+  --color-grad-1: #1832d8;
+  --color-grad-2: #2b4bff;
+  --color-grad-3: #0891b2;
+}
+html[data-theme="violet"] {
+  --color-paper-2: #f7f6fb;
+  --color-paper-3: #efedf5;
+  --color-ink: #0e0d14;
+  --color-mist: #55525f;
+  --color-dim: #6c6977;
+  --color-line: rgb(14 13 20 / 0.09);
+  --color-line-strong: rgb(14 13 20 / 0.18);
+  --color-violet: #7c3aed;
+  --color-violet-deep: #6d28d9;
+  --color-lilac: #6d4aff;
+  --color-cyan: #06b6d4;
+  --color-grad-1: #7c3aed;
+  --color-grad-2: #6366f1;
+  --color-grad-3: #0891b2;
+}
+html[data-theme="sunset"] {
+  --color-paper-2: #fdf6f1;
+  --color-paper-3: #f7ebe1;
+  --color-ink: #17120e;
+  --color-mist: #5a4f47;
+  --color-dim: #75685f;
+  --color-line: rgb(23 18 14 / 0.09);
+  --color-line-strong: rgb(23 18 14 / 0.18);
+  --color-violet: #ea580c;
+  --color-violet-deep: #c2410c;
+  --color-lilac: #c2410c;
+  --color-cyan: #f59e0b;
+  --color-grad-1: #c2410c;
+  --color-grad-2: #ea580c;
+  --color-grad-3: #d97706;
+}
+html[data-theme="rose"] {
+  --color-paper-2: #fdf4f6;
+  --color-paper-3: #f8e7eb;
+  --color-ink: #170c10;
+  --color-mist: #5a4a50;
+  --color-dim: #75646a;
+  --color-line: rgb(23 12 16 / 0.09);
+  --color-line-strong: rgb(23 12 16 / 0.18);
+  --color-violet: #e11d48;
+  --color-violet-deep: #be123c;
+  --color-lilac: #be123c;
+  --color-cyan: #6366f1;
+  --color-grad-1: #e11d48;
+  --color-grad-2: #db2777;
+  --color-grad-3: #6366f1;
+}
+html[data-theme="mono"] {
+  --color-paper-2: #f5f5f5;
+  --color-paper-3: #ebebeb;
+  --color-ink: #0a0a0a;
+  --color-mist: #525252;
+  --color-dim: #6b6b6b;
+  --color-line: rgb(10 10 10 / 0.09);
+  --color-line-strong: rgb(10 10 10 / 0.18);
+  --color-violet: #171717;
+  --color-violet-deep: #000000;
+  --color-lilac: #262626;
+  --color-cyan: #737373;
+  --color-grad-1: #000000;
+  --color-grad-2: #404040;
+  --color-grad-3: #737373;
+}
+/* Mono's accents are black, so lift them to light tones on the dark footer. */
+html[data-theme="mono"] .theme-invert {
+  --color-violet: #e5e5e5;
+  --color-lilac: #d4d4d4;
+  --color-grad-1: #ffffff;
+  --color-grad-2: #d4d4d4;
+  --color-grad-3: #a3a3a3;
+}
+
 /* Accent words stay upright (synthetic italics look dated in a sans display face). */
 .italic.text-gradient,
 .font-display .italic {
@@ -245,6 +338,10 @@ html.intro-seen #preloader {
   --color-line: rgb(255 255 255 / 0.1);
   --color-line-strong: rgb(255 255 255 / 0.2);
   --color-lilac: color-mix(in oklab, var(--color-violet) 70%, white);
+  /* Brighter gradient stops derived from the active theme, so accents read well on black. */
+  --color-grad-1: color-mix(in oklab, var(--color-violet) 70%, white);
+  --color-grad-2: color-mix(in oklab, var(--color-violet) 50%, var(--color-cyan));
+  --color-grad-3: color-mix(in oklab, var(--color-cyan) 75%, white);
   color-scheme: dark;
 }
 .theme-invert .text-outline {
