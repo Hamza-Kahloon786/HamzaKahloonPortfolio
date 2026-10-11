@@ -76,7 +76,7 @@ function CursorInner() {
   }, [x, y]);
 
   const big = variant === "view" || variant === "drag";
-  const ringSize = big ? 92 : variant === "link" ? 58 : variant === "text" ? 6 : 34;
+  const ringSize = big ? 92 : variant === "link" ? 46 : variant === "text" ? 6 : 34;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
@@ -87,7 +87,7 @@ function CursorInner() {
         <motion.div
           className={cn(
             "grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border transition-colors duration-300",
-            big ? "border-transparent bg-violet/95" : variant === "link" ? "border-violet/60 bg-violet/10 backdrop-blur-[2px]" : "border-ink/40 bg-transparent",
+            big ? "border-transparent bg-violet/95" : variant === "link" ? "border-[1.5px] border-violet bg-transparent" : "border-ink/40 bg-transparent",
           )}
           animate={{
             width: ringSize,
@@ -116,7 +116,7 @@ function CursorInner() {
       <motion.div className="absolute left-0 top-0" style={{ x, y }}>
         <motion.div
           className="-translate-x-1/2 -translate-y-1/2 rounded-full bg-violet"
-          animate={{ width: big || variant === "text" ? 0 : 6, height: big || variant === "text" ? 0 : 6, opacity: visible ? 1 : 0 }}
+          animate={{ width: big || variant !== "default" ? 0 : 6, height: big || variant !== "default" ? 0 : 6, opacity: visible ? 1 : 0 }}
           transition={{ duration: 0.2 }}
         />
       </motion.div>

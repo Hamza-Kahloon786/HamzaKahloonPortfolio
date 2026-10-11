@@ -55,6 +55,10 @@ A voice + text assistant that answers questions about Hamza's work and can open 
 - The assistant only appears when `OPENAI_API_KEY` is set. Put it in `.env.local` (git-ignored) locally and in Vercel's environment variables in production.
 - **Cost control:** use a dedicated OpenAI *project* key and set a monthly budget limit on that project — rate limits are per server instance, so the budget is the real cap.
 
+## Color themes
+
+Visitors can pick a color theme from the palette button in the navbar: **Emerald** (default), **Ocean**, **Violet**, **Sunset**, **Rose** and **Mono**. Themes only swap the color tokens (`html[data-theme=…]` blocks in `src/app/globals.css`); fonts and the white background stay the same. The choice is saved in the browser and applied before the first paint, so there's no flash of the default colors. To add or edit a theme, update `THEMES` in `src/lib/theme.ts` and add a matching CSS block.
+
 ## Sound
 
 UI sounds are synthesized with the Web Audio API (`src/lib/sound.ts`) — no audio files. They're off by default; visitors switch them on with the speaker button in the navbar.
